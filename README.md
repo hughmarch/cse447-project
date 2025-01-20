@@ -5,6 +5,9 @@ For this project, you will develop a program that takes in a string of character
 For illustration purposes, this repo contains a dummy program that simply generates 3 random guesses of the next character.
 
 
+source activate base
+conda activate nanoGPT
+
 ## Input format
 
 `example/input.txt` contains an example of what the input to your program will look like.
