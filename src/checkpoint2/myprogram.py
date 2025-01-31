@@ -71,7 +71,7 @@ def preprocess_to_subset(file_path, output_path, subset_ratio=0.001):
     logging.info(f"Subset of {subset_size} lines saved to {output_path}")
 
 # ---- PREPROCESSING ----
-def preprocess_text(text, remove_spaces=False):
+def preprocess_text(text, remove_spaces=False, use_subset=False):
     """
     Preprocess the input text for character-level modeling.
     - Optionally removes spaces or normalizes them.
@@ -86,6 +86,9 @@ def preprocess_text(text, remove_spaces=False):
     """
     logging.info("Preprocessing text...")
     # Remove non-printable characters
+    
+    if use_subset:
+        text = text[:10000]
     text = "".join(ch for ch in text if ch in string.printable)
 
     if remove_spaces:
@@ -274,7 +277,7 @@ def main():
         with open(args.train_data, "r", encoding="utf-8") as f:
             raw_text = f.read()
         # Preprocess the text
-        train_data = preprocess_text(raw_text, remove_spaces=args.remove_spaces)
+        train_data = preprocess_text(raw_text, remove_spaces=args.remove_spaces, use_subset=True)
         train_model(
             train_data=train_data,
             embed_dim=128,          # Embedding size
