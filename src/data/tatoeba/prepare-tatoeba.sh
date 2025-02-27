@@ -4,7 +4,9 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 TARGET_DIR="$SCRIPT_DIR/../../../work/data/tatoeba"
 TARGET_FILE="$TARGET_DIR/sentences-test.csv"
 INPUT_FILE="$TARGET_DIR/sentences.csv"
-PREPROCESSED_DIR="$TARGET_DIR/tatoeba-preprocessed-test"
+
+# Define expected dataset directories
+DATASET_SIZES=("test-001" "test-005" "test-025" "test-100")
 
 if [ ! -f "$TARGET_FILE" ]; then
     mkdir -p "$TARGET_DIR"
@@ -25,11 +27,20 @@ else
     echo "Dataset already processed. Skipping download and extraction."
 fi
 
+# Check if all expected preprocessed test datasets exist
+ALL_DATASETS_PRESENT=true
+for DATASET in "${DATASET_SIZES[@]}"; do
+    if [ ! -d "$TARGET_DIR/$DATASET" ]; then
+        ALL_DATASETS_PRESENT=false
+        break
+    fi
+done
+
 # Preprocess test dataset if not already done
-if [ ! -d "$PREPROCESSED_DIR" ]; then
+if [ "$ALL_DATASETS_PRESENT" = false ]; then
     echo "Preprocessing test dataset..."
-    python "$SCRIPT_DIR/prepare_test.py" "$TARGET_FILE" "$PREPROCESSED_DIR" 5
+    python "$SCRIPT_DIR/prepare_test.py" "$TARGET_FILE" "$TARGET_DIR" 1 # num_splits per sentence
     echo "Test dataset preprocessing complete!"
 else
-    echo "Test dataset already preprocessed. Skipping."
+    echo "All test datasets already preprocessed. Skipping."
 fi

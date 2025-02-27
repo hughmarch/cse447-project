@@ -160,7 +160,7 @@ def predict_next_chars(model_path, input_texts, top_k=3):
                     encoded_input.append(dataset.char_to_idx[ch])  # Encode known character
                 else:
                     # Generate random predictions for unknown character
-                    logging.warning(f"Unknown character '{ch}' found. Generating random predictions.")
+                    # logging.warning(f"Unknown character '{ch}' found. Generating random predictions.")
                     random_chars = random.sample(
                         [char for char in dataset.char_to_idx.keys() if char != " "],
                         k=top_k,
